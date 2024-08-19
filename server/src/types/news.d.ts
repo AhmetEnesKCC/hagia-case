@@ -1,8 +1,8 @@
 export type OneNewsType = {
   description: string;
-  thumbnail: string;
+  image: string;
   title: string;
-  date: string | Date;
+  date: string;
 };
 
 export type NewsType = OneNewsType[];

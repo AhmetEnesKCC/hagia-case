@@ -1,6 +1,7 @@
 import axios from "axios";
 import { parseHTML } from "../helpers/htmlParse.js";
 import { prisma } from "../db/connect.js";
+import { analyzeAllNewsAI } from "./analyze-all-news.js";
 export const saveNews = async () => {
     const news = await getNews();
     await prisma.news.createMany({
@@ -10,6 +11,13 @@ export const saveNews = async () => {
     const newsCount = await prisma.news.count();
     console.log(newsCount);
     console.log("News saved successfully");
+    try {
+        await analyzeAllNewsAI();
+    }
+    catch (err) {
+        console.error(err);
+        console.log("Error analyzing news");
+    }
 };
 const fetchNews = async () => {
     const res = await axios.get(process.env.NEWS_URL);

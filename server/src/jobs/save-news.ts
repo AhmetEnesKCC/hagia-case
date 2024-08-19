@@ -1,6 +1,6 @@
 import cron from "node-cron";
-import { getNews } from "../utils/get-news";
+import { getNews, saveNews } from "../utils/save-news.js";
 
-export const getNewsCron = (cronTime: string) => {
-  cron.schedule(cronTime, getNews);
+export const saveNewsCron = (cronTime: string) => {
+  cron.schedule(cronTime, saveNews);
 };

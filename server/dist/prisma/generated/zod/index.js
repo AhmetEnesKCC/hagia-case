@@ -6,9 +6,10 @@ import { z } from 'zod';
 // ENUMS
 /////////////////////////////////////////
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted', 'ReadCommitted', 'RepeatableRead', 'Serializable']);
-export const NewsScalarFieldEnumSchema = z.enum(['id', 'title', 'description', 'image', 'createdAt', 'updatedAt']);
+export const NewsScalarFieldEnumSchema = z.enum(['id', 'title', 'date', 'description', 'image', 'analyze', 'createdAt', 'updatedAt']);
 export const SortOrderSchema = z.enum(['asc', 'desc']);
 export const QueryModeSchema = z.enum(['default', 'insensitive']);
+export const NullsOrderSchema = z.enum(['first', 'last']);
 /////////////////////////////////////////
 // MODELS
 /////////////////////////////////////////
@@ -18,8 +19,10 @@ export const QueryModeSchema = z.enum(['default', 'insensitive']);
 export const NewsSchema = z.object({
     id: z.number().int(),
     title: z.string(),
+    date: z.string(),
     description: z.string(),
     image: z.string(),
+    analyze: z.string().nullable(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
 });
@@ -31,8 +34,10 @@ export const NewsSchema = z.object({
 export const NewsSelectSchema = z.object({
     id: z.boolean().optional(),
     title: z.boolean().optional(),
+    date: z.boolean().optional(),
     description: z.boolean().optional(),
     image: z.boolean().optional(),
+    analyze: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional(),
 }).strict();
@@ -45,38 +50,55 @@ export const NewsWhereInputSchema = z.object({
     NOT: z.union([z.lazy(() => NewsWhereInputSchema), z.lazy(() => NewsWhereInputSchema).array()]).optional(),
     id: z.union([z.lazy(() => IntFilterSchema), z.number()]).optional(),
     title: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
+    date: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
     description: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
     image: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
+    analyze: z.union([z.lazy(() => StringNullableFilterSchema), z.string()]).optional().nullable(),
     createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
     updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
 }).strict();
 export const NewsOrderByWithRelationInputSchema = z.object({
     id: z.lazy(() => SortOrderSchema).optional(),
     title: z.lazy(() => SortOrderSchema).optional(),
+    date: z.lazy(() => SortOrderSchema).optional(),
     description: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    analyze: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
     updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
-export const NewsWhereUniqueInputSchema = z.object({
-    id: z.number().int()
-})
+export const NewsWhereUniqueInputSchema = z.union([
+    z.object({
+        id: z.number().int(),
+        title: z.string()
+    }),
+    z.object({
+        id: z.number().int(),
+    }),
+    z.object({
+        title: z.string(),
+    }),
+])
     .and(z.object({
     id: z.number().int().optional(),
+    title: z.string().optional(),
     AND: z.union([z.lazy(() => NewsWhereInputSchema), z.lazy(() => NewsWhereInputSchema).array()]).optional(),
     OR: z.lazy(() => NewsWhereInputSchema).array().optional(),
     NOT: z.union([z.lazy(() => NewsWhereInputSchema), z.lazy(() => NewsWhereInputSchema).array()]).optional(),
-    title: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
+    date: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
     description: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
     image: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
+    analyze: z.union([z.lazy(() => StringNullableFilterSchema), z.string()]).optional().nullable(),
     createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
     updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
 }).strict());
 export const NewsOrderByWithAggregationInputSchema = z.object({
     id: z.lazy(() => SortOrderSchema).optional(),
     title: z.lazy(() => SortOrderSchema).optional(),
+    date: z.lazy(() => SortOrderSchema).optional(),
     description: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    analyze: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
     updatedAt: z.lazy(() => SortOrderSchema).optional(),
     _count: z.lazy(() => NewsCountOrderByAggregateInputSchema).optional(),
@@ -91,61 +113,77 @@ export const NewsScalarWhereWithAggregatesInputSchema = z.object({
     NOT: z.union([z.lazy(() => NewsScalarWhereWithAggregatesInputSchema), z.lazy(() => NewsScalarWhereWithAggregatesInputSchema).array()]).optional(),
     id: z.union([z.lazy(() => IntWithAggregatesFilterSchema), z.number()]).optional(),
     title: z.union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()]).optional(),
+    date: z.union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()]).optional(),
     description: z.union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()]).optional(),
     image: z.union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()]).optional(),
+    analyze: z.union([z.lazy(() => StringNullableWithAggregatesFilterSchema), z.string()]).optional().nullable(),
     createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
     updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
 }).strict();
 export const NewsCreateInputSchema = z.object({
     title: z.string(),
+    date: z.string(),
     description: z.string(),
     image: z.string(),
+    analyze: z.string().optional().nullable(),
     createdAt: z.coerce.date().optional(),
     updatedAt: z.coerce.date().optional()
 }).strict();
 export const NewsUncheckedCreateInputSchema = z.object({
     id: z.number().int().optional(),
     title: z.string(),
+    date: z.string(),
     description: z.string(),
     image: z.string(),
+    analyze: z.string().optional().nullable(),
     createdAt: z.coerce.date().optional(),
     updatedAt: z.coerce.date().optional()
 }).strict();
 export const NewsUpdateInputSchema = z.object({
     title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    date: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     description: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     image: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    analyze: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
     createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
     updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
 }).strict();
 export const NewsUncheckedUpdateInputSchema = z.object({
     id: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
     title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    date: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     description: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     image: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    analyze: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
     createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
     updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
 }).strict();
 export const NewsCreateManyInputSchema = z.object({
     id: z.number().int().optional(),
     title: z.string(),
+    date: z.string(),
     description: z.string(),
     image: z.string(),
+    analyze: z.string().optional().nullable(),
     createdAt: z.coerce.date().optional(),
     updatedAt: z.coerce.date().optional()
 }).strict();
 export const NewsUpdateManyMutationInputSchema = z.object({
     title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    date: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     description: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     image: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    analyze: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
     createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
     updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
 }).strict();
 export const NewsUncheckedUpdateManyInputSchema = z.object({
     id: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
     title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    date: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     description: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
     image: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+    analyze: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
     createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
     updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
 }).strict();
@@ -173,6 +211,20 @@ export const StringFilterSchema = z.object({
     mode: z.lazy(() => QueryModeSchema).optional(),
     not: z.union([z.string(), z.lazy(() => NestedStringFilterSchema)]).optional(),
 }).strict();
+export const StringNullableFilterSchema = z.object({
+    equals: z.string().optional().nullable(),
+    in: z.string().array().optional().nullable(),
+    notIn: z.string().array().optional().nullable(),
+    lt: z.string().optional(),
+    lte: z.string().optional(),
+    gt: z.string().optional(),
+    gte: z.string().optional(),
+    contains: z.string().optional(),
+    startsWith: z.string().optional(),
+    endsWith: z.string().optional(),
+    mode: z.lazy(() => QueryModeSchema).optional(),
+    not: z.union([z.string(), z.lazy(() => NestedStringNullableFilterSchema)]).optional().nullable(),
+}).strict();
 export const DateTimeFilterSchema = z.object({
     equals: z.coerce.date().optional(),
     in: z.coerce.date().array().optional(),
@@ -183,11 +235,17 @@ export const DateTimeFilterSchema = z.object({
     gte: z.coerce.date().optional(),
     not: z.union([z.coerce.date(), z.lazy(() => NestedDateTimeFilterSchema)]).optional(),
 }).strict();
+export const SortOrderInputSchema = z.object({
+    sort: z.lazy(() => SortOrderSchema),
+    nulls: z.lazy(() => NullsOrderSchema).optional()
+}).strict();
 export const NewsCountOrderByAggregateInputSchema = z.object({
     id: z.lazy(() => SortOrderSchema).optional(),
     title: z.lazy(() => SortOrderSchema).optional(),
+    date: z.lazy(() => SortOrderSchema).optional(),
     description: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    analyze: z.lazy(() => SortOrderSchema).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
     updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -197,16 +255,20 @@ export const NewsAvgOrderByAggregateInputSchema = z.object({
 export const NewsMaxOrderByAggregateInputSchema = z.object({
     id: z.lazy(() => SortOrderSchema).optional(),
     title: z.lazy(() => SortOrderSchema).optional(),
+    date: z.lazy(() => SortOrderSchema).optional(),
     description: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    analyze: z.lazy(() => SortOrderSchema).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
     updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 export const NewsMinOrderByAggregateInputSchema = z.object({
     id: z.lazy(() => SortOrderSchema).optional(),
     title: z.lazy(() => SortOrderSchema).optional(),
+    date: z.lazy(() => SortOrderSchema).optional(),
     description: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    analyze: z.lazy(() => SortOrderSchema).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
     updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -245,6 +307,23 @@ export const StringWithAggregatesFilterSchema = z.object({
     _min: z.lazy(() => NestedStringFilterSchema).optional(),
     _max: z.lazy(() => NestedStringFilterSchema).optional()
 }).strict();
+export const StringNullableWithAggregatesFilterSchema = z.object({
+    equals: z.string().optional().nullable(),
+    in: z.string().array().optional().nullable(),
+    notIn: z.string().array().optional().nullable(),
+    lt: z.string().optional(),
+    lte: z.string().optional(),
+    gt: z.string().optional(),
+    gte: z.string().optional(),
+    contains: z.string().optional(),
+    startsWith: z.string().optional(),
+    endsWith: z.string().optional(),
+    mode: z.lazy(() => QueryModeSchema).optional(),
+    not: z.union([z.string(), z.lazy(() => NestedStringNullableWithAggregatesFilterSchema)]).optional().nullable(),
+    _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+    _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+    _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
+}).strict();
 export const DateTimeWithAggregatesFilterSchema = z.object({
     equals: z.coerce.date().optional(),
     in: z.coerce.date().array().optional(),
@@ -260,6 +339,9 @@ export const DateTimeWithAggregatesFilterSchema = z.object({
 }).strict();
 export const StringFieldUpdateOperationsInputSchema = z.object({
     set: z.string().optional()
+}).strict();
+export const NullableStringFieldUpdateOperationsInputSchema = z.object({
+    set: z.string().optional().nullable()
 }).strict();
 export const DateTimeFieldUpdateOperationsInputSchema = z.object({
     set: z.coerce.date().optional()
@@ -293,6 +375,19 @@ export const NestedStringFilterSchema = z.object({
     startsWith: z.string().optional(),
     endsWith: z.string().optional(),
     not: z.union([z.string(), z.lazy(() => NestedStringFilterSchema)]).optional(),
+}).strict();
+export const NestedStringNullableFilterSchema = z.object({
+    equals: z.string().optional().nullable(),
+    in: z.string().array().optional().nullable(),
+    notIn: z.string().array().optional().nullable(),
+    lt: z.string().optional(),
+    lte: z.string().optional(),
+    gt: z.string().optional(),
+    gte: z.string().optional(),
+    contains: z.string().optional(),
+    startsWith: z.string().optional(),
+    endsWith: z.string().optional(),
+    not: z.union([z.string(), z.lazy(() => NestedStringNullableFilterSchema)]).optional().nullable(),
 }).strict();
 export const NestedDateTimeFilterSchema = z.object({
     equals: z.coerce.date().optional(),
@@ -344,6 +439,32 @@ export const NestedStringWithAggregatesFilterSchema = z.object({
     _count: z.lazy(() => NestedIntFilterSchema).optional(),
     _min: z.lazy(() => NestedStringFilterSchema).optional(),
     _max: z.lazy(() => NestedStringFilterSchema).optional()
+}).strict();
+export const NestedStringNullableWithAggregatesFilterSchema = z.object({
+    equals: z.string().optional().nullable(),
+    in: z.string().array().optional().nullable(),
+    notIn: z.string().array().optional().nullable(),
+    lt: z.string().optional(),
+    lte: z.string().optional(),
+    gt: z.string().optional(),
+    gte: z.string().optional(),
+    contains: z.string().optional(),
+    startsWith: z.string().optional(),
+    endsWith: z.string().optional(),
+    not: z.union([z.string(), z.lazy(() => NestedStringNullableWithAggregatesFilterSchema)]).optional().nullable(),
+    _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+    _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+    _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
+}).strict();
+export const NestedIntNullableFilterSchema = z.object({
+    equals: z.number().optional().nullable(),
+    in: z.number().array().optional().nullable(),
+    notIn: z.number().array().optional().nullable(),
+    lt: z.number().optional(),
+    lte: z.number().optional(),
+    gt: z.number().optional(),
+    gte: z.number().optional(),
+    not: z.union([z.number(), z.lazy(() => NestedIntNullableFilterSchema)]).optional().nullable(),
 }).strict();
 export const NestedDateTimeWithAggregatesFilterSchema = z.object({
     equals: z.coerce.date().optional(),

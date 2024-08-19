@@ -8,6 +8,9 @@ import { load as loadCheerio } from "cheerio";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { AppRouter, appRouter } from "./trpc.js";
 import { connectToDb, prisma } from "./db/connect.js";
+import { saveNewsCron } from "./jobs/save-news.js";
+import { saveNews } from "./utils/save-news.js";
+import { analyzeNewsAI } from "./utils/analyze-news-ai.js";
 
 // created for each request
 const createContext = ({
@@ -49,11 +52,6 @@ app.get("/", (req, res) => {
 
 app.get("/get-news", getNewsRoute);
 
-app.use(express.static(__dirname + "/public"));
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
-});
-
 app.use(
   "/trpc",
   trpcExpress.createExpressMiddleware({
@@ -61,5 +59,15 @@ app.use(
     createContext,
   })
 );
+
+app.use(express.static(__dirname + "/public"));
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
+
+// cron time for every 10 minutes
+
+saveNews();
+saveNewsCron("*/12 * * * *");
 
 export {};

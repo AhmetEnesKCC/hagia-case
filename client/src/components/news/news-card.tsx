@@ -8,7 +8,7 @@ import {
 } from "../ui/card";
 import { trpc } from "@/utils/trpc";
 
-const NewsCard = async () => {
+const NewsCard = ({ onenews }: { onenews: any }) => {
   return (
     <Card className="w-[300px]">
       <CardHeader>
