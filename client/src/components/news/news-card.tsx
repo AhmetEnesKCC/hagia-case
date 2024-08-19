@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardContent,
@@ -6,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { trpc } from "@/utils/trpc";
+
 import { OneNewsType } from "@/types/trpc";
 
 const NewsCard = ({ onenews }: { onenews: OneNewsType }) => {
@@ -14,7 +13,7 @@ const NewsCard = ({ onenews }: { onenews: OneNewsType }) => {
     <Card className="w-[300px] h-full">
       <CardHeader>
         <img src={onenews.image} className="" />
-        <CardTitle>{onenews.title}</CardTitle>
+        <CardTitle className="break-all my-2">{onenews.title}</CardTitle>
         <CardDescription>{onenews.description}</CardDescription>
       </CardHeader>
       <CardContent className="">

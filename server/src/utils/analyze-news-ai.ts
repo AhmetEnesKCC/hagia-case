@@ -1,4 +1,3 @@
-import { sleep } from "openai/core.mjs";
 import { OneNewsType } from "../types/news";
 
 // @ts-expect-error no declaration type file for this module
@@ -11,8 +10,6 @@ const openai = new OpenAI({
 });
 
 export const analyzeNewsAI = async (onenews: OneNewsType) => {
-  await sleep(1000);
-
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [

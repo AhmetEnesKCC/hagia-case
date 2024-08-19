@@ -1,5 +1,5 @@
-import { prisma } from "../db/connect.js";
-import { analyzeNewsAI } from "./analyze-news-ai.js";
+import { prisma } from "../db/connect";
+import { analyzeNewsAI } from "./analyze-news-ai";
 
 export const analyzeAllNewsAI = async () => {
   const unanalyzedNews = await prisma.news.findMany({
@@ -19,5 +19,5 @@ export const analyzeAllNewsAI = async () => {
       },
     });
   });
-  console.log("All news analyzed successfully");
+  return "All news analyzed successfully";
 };

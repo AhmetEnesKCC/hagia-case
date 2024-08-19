@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@trpc/client": "^10.45.2",
-    "@types/cheerio": "^0.22.35",
-    "@types/pg": "^8.11.6",
-    "axios": "^1.7.4",
-    "cheerio": "^1.0.0"
-  }
-}

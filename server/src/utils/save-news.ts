@@ -1,9 +1,10 @@
 import axios from "axios";
 import { NewsType } from "../types/news";
-import { parseHTML } from "../helpers/htmlParse.js";
-import { prisma } from "../db/connect.js";
-import { analyzeAllNewsAI } from "./analyze-all-news.js";
+import { parseHTML } from "../helpers/htmlParse";
+import { prisma } from "../db/connect";
+import { analyzeAllNewsAI } from "./analyze-all-news";
 import puppeteer from "puppeteer";
+import * as cheerio from "cheerio";
 
 export const saveNews = async () => {
   const news = await getNews();
@@ -23,6 +24,7 @@ export const saveNews = async () => {
     console.error(err);
     console.log("Error analyzing news");
   }
+  return "News saved successfully";
 };
 
 function wait(ms: number) {
@@ -40,7 +42,7 @@ const scrapNews = async () => {
   const browser = await puppeteer.launch();
   const [page] = await browser.pages();
   await page.goto(process.env.NEWS_URL!, { waitUntil: "networkidle0" });
-  await wait(20000);
+  await wait(2000);
   const data = await page.content();
   return data;
 };
@@ -51,7 +53,7 @@ export const getNews = async () => {
 
   const resNews: NewsType = [];
 
-  parsedNews.each((_, el) => {
+  parsedNews.each((_: any, el: cheerio.Element) => {
     const texts = html(el).find("figcaption span");
     const image = html(el).find("figure img").attr("src") ?? "";
     const date = html(texts[0]).text();
