@@ -13,10 +13,17 @@ function App() {
     );
   }
   return (
-    <div className="grid grid-cols-3">
-      {news.data?.map((onenews) => (
-        <NewsCard key={onenews.id} />
-      ))}
+    <div>
+      <div>
+        <h3 className="text-center p-2 font-bold">
+          Haber sayısı: {news.data?.length}
+        </h3>
+      </div>
+      <div className="grid grid-cols-3 items-center  gap-3 w-max mx-auto">
+        {news.data?.map((onenews) => (
+          <NewsCard onenews={onenews} key={onenews.id} />
+        ))}
+      </div>
     </div>
   );
 }

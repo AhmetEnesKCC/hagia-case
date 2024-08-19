@@ -7,16 +7,20 @@ import {
   CardTitle,
 } from "../ui/card";
 import { trpc } from "@/utils/trpc";
+import { OneNewsType } from "@/types/trpc";
 
-const NewsCard = ({ onenews }: { onenews: any }) => {
+const NewsCard = ({ onenews }: { onenews: OneNewsType }) => {
   return (
-    <Card className="w-[300px]">
+    <Card className="w-[300px] h-full">
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <img src={onenews.image} className="" />
+        <CardTitle>{onenews.title}</CardTitle>
+        <CardDescription>{onenews.description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
+      <CardContent className="">
+        <div className="flex  items-end  justify-end ">
+          <p>{onenews.analyze}</p>
+        </div>
       </CardContent>
     </Card>
   );
