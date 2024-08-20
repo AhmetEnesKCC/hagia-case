@@ -1,8 +1,5 @@
 import { OneNewsType } from "../types/news";
 
-// @ts-expect-error no declaration type file for this module
-import md2json from "md-2-json";
-
 import OpenAI from "openai";
 
 const openai = new OpenAI({

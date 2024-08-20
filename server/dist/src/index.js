@@ -69,6 +69,7 @@ app.use("/trpc", trpcExpress.createExpressMiddleware({
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
+// this is for checking news. not for client. client using trpc route
 app.get("/get-news", get_news_1.default);
 app.use(express_1.default.static(__dirname + "/public"));
 app.listen(process.env.PORT, () => {

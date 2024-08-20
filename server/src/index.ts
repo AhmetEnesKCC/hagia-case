@@ -6,7 +6,7 @@ import { resolve } from "path";
 import getNewsRoute from "./routes/news/get-news";
 import { load as loadCheerio } from "cheerio";
 import * as trpcExpress from "@trpc/server/adapters/express";
-import { AppRouter, appRouter } from "./trpc.js";
+import { appRouter } from "./trpc.js";
 import { connectToDb, prisma } from "./db/connect";
 import { saveNewsCron } from "./jobs/save-news";
 import { saveNews } from "./utils/save-news";
@@ -58,6 +58,7 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// this is for checking news. not for client. client using trpc route
 app.get("/get-news", getNewsRoute);
 
 app.use(express.static(__dirname + "/public"));

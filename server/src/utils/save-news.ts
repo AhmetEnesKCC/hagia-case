@@ -4,7 +4,6 @@ import { parseHTML } from "../helpers/htmlParse";
 import { prisma } from "../db/connect";
 import { analyzeAllNewsAI } from "./analyze-all-news";
 import puppeteer from "puppeteer";
-import * as cheerio from "cheerio";
 
 export const saveNews = async () => {
   const news = await getNews();
