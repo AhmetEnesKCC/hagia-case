@@ -19,7 +19,7 @@ export const analyzeNewsAI = async (onenews: OneNewsType) => {
       },
       {
         role: "user",
-        content: `${onenews.description} \n Bunlar haberlerim. Bu haberlerin duygu analizini bir kelime ve bir emojiyle yapmani istiyorum. sadece emoji ve kelimeyi dön`,
+        content: `${onenews.description} \n Bunlar haberlerim. Bu haberlerin duygu analizini bir kelime ve bir emojiyle yapmani istiyorum. sadece emoji ve kelimeyi dön. Bu kelime su seceneklerden biri olsun: Olumlu, Olumsuz, Nötr `,
       },
     ],
   });

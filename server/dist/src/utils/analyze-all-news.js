@@ -1,14 +1,17 @@
-import { prisma } from "../db/connect.js";
-import { analyzeNewsAI } from "./analyze-news-ai.js";
-export const analyzeAllNewsAI = async () => {
-    const unanalyzedNews = await prisma.news.findMany({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.analyzeAllNewsAI = void 0;
+const connect_1 = require("../db/connect");
+const analyze_news_ai_1 = require("./analyze-news-ai");
+const analyzeAllNewsAI = async () => {
+    const unanalyzedNews = await connect_1.prisma.news.findMany({
         where: {
             analyze: null,
         },
     });
     unanalyzedNews.forEach(async (onenews) => {
-        const analyze = await analyzeNewsAI(onenews);
-        await prisma.news.update({
+        const analyze = await (0, analyze_news_ai_1.analyzeNewsAI)(onenews);
+        await connect_1.prisma.news.update({
             where: {
                 id: onenews.id,
             },
@@ -17,5 +20,6 @@ export const analyzeAllNewsAI = async () => {
             },
         });
     });
-    console.log("All news analyzed successfully");
+    return "All news analyzed successfully";
 };
+exports.analyzeAllNewsAI = analyzeAllNewsAI;

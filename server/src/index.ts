@@ -3,14 +3,13 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import { resolve } from "path";
-import getNewsRoute from "./routes/news/get-news.js";
+import getNewsRoute from "./routes/news/get-news";
 import { load as loadCheerio } from "cheerio";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { AppRouter, appRouter } from "./trpc.js";
-import { connectToDb, prisma } from "./db/connect.js";
-import { saveNewsCron } from "./jobs/save-news.js";
-import { saveNews } from "./utils/save-news.js";
-import { analyzeNewsAI } from "./utils/analyze-news-ai.js";
+import { connectToDb, prisma } from "./db/connect";
+import { saveNewsCron } from "./jobs/save-news";
+import { saveNews } from "./utils/save-news";
 
 // created for each request
 const createContext = ({
@@ -26,7 +25,7 @@ globalThis.environment = process.env.NODE_ENV ?? "development";
 globalThis.$ = loadCheerio;
 
 dotenv.config({
-  path: __dirname + "/" + (environment?.toLowerCase() + ".env"),
+  path: __dirname + "/" + "../../" + (environment?.toLowerCase() + ".env"),
 });
 
 // Connect to database
