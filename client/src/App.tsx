@@ -3,7 +3,6 @@ import NewsCard from "./components/news/news-card";
 import { trpc } from "./utils/trpc";
 import { DotLoader } from "react-spinners";
 import FilterSelect from "./components/common/filter-select";
-import { OneNewsType } from "./types/trpc";
 import { useMemo, useState } from "react";
 import LanguageToggle from "./components/layout/language-toggle";
 import { useTranslation } from "react-i18next";
@@ -21,7 +20,7 @@ function NewsFilter({
     <FilterSelect
       value={value}
       onValueChange={(v) => onValueChange(v === "Tümü" ? "" : v)}
-      label="Analiz"
+      label={t("analyze")}
       placeholder={t("select_analyze")}
       items={[
         ...Array.from(

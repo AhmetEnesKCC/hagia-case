@@ -1,6 +1,5 @@
 import { initTRPC } from "@trpc/server";
 import { prisma } from "./db/connect.js";
-import { z } from "zod";
 
 const t = initTRPC.create();
 

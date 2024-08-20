@@ -57,17 +57,19 @@ dotenv_1.default.config({
     await connect_1.prisma.$disconnect();
     process.exit(1);
 });
+// Creating Expres App
 const app = (0, express_1.default)();
+// Express Plugins
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
-app.get("/", (req, res) => {
-    res.send("Hello World");
-});
-app.get("/get-news", get_news_1.default);
 app.use("/trpc", trpcExpress.createExpressMiddleware({
     router: trpc_js_1.appRouter,
     createContext,
 }));
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
+app.get("/get-news", get_news_1.default);
 app.use(express_1.default.static(__dirname + "/public"));
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);

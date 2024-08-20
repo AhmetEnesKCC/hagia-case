@@ -40,17 +40,12 @@ connectToDb()
     process.exit(1);
   });
 
+// Creating Expres App
 const app = express();
 
+// Express Plugins
 app.use(cors());
 app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-app.get("/get-news", getNewsRoute);
-
 app.use(
   "/trpc",
   trpcExpress.createExpressMiddleware({
@@ -59,7 +54,14 @@ app.use(
   })
 );
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+app.get("/get-news", getNewsRoute);
+
 app.use(express.static(__dirname + "/public"));
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
