@@ -108,3 +108,9 @@ can be tested with the following command
 
 - If you do everything correct your application will be opened at
   http://localhost:5173
+
+### Development Versions
+
+- This app developed with
+  - node@20.15.0
+  - typescript@^5.5.4
