@@ -1,4 +1,4 @@
-# Hagia Software - Case
+# Hagia Project - Case
 
 ### This app uses the following languages, packages and frameworks
 
